@@ -1,19 +1,10 @@
 "use client";
 import { useState } from "react";
-import {
-  Accordion,
-  AccordionItem,
-  AccordionPanel,
-  AccordionButton,
-  AccordionIcon,
-  Text,
-  VStack,
-  useColorModeValue,
-  Box,
-} from "@chakra-ui/react";
+import { Accordion, AccordionItem, AccordionPanel, AccordionButton, AccordionIcon, Text, VStack, useColorModeValue, Box } from "@chakra-ui/react";
 import Header from "./Header";
 import { useStateManagementStore } from "@/components/zustand-store/state-management";
 import FormattedTitles from "@/components/utils/FormattedTitles";
+
 const Sidebar = ({ titles, handleClick }) => {
   const { selectedMenu, setSelectedMenu } = useStateManagementStore();
   const [isHoverSidebar, setIsHoverSidebar] = useState("");

@@ -1,13 +1,7 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import { useRouter } from "next/router";
-import {
-  Box,
-  Grid,
-  GridItem,
-  useBreakpointValue,
-  useColorModeValue,
-} from "@chakra-ui/react";
+import { Box, Grid, GridItem, useBreakpointValue, useColorModeValue } from "@chakra-ui/react";
 import MobileNavbar from "./navbar/MobileNavbar";
 import ComponentMapping from "../data/content";
 import { useStateManagementStore } from "../zustand-store/state-management";
@@ -17,12 +11,31 @@ import Navbar from "./navbar";
 
 const Layout = () => {
   const router = useRouter();
-  const { setShowMenu } = useStateManagementStore;
+  const { setShowMenu } = useStateManagementStore();
   const isDesktop = useBreakpointValue({ base: false, lg: true });
   const bgColor = useColorModeValue("white", "#121539 100%");
 
+  useEffect(() => {
+    const handleScroll = () => {
+      const sections = Object.keys(ComponentMapping);
+      let currentSection = sections[0];
+
+      sections.forEach((section) => {
+        const element = document.getElementById(section);
+        if (element && element.getBoundingClientRect().top <= 0) {
+          currentSection = section;
+        }
+      });
+
+      router.replace(`#${currentSection}`, undefined, { shallow: true });
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [router]);
+
   const handleNavigation = (id) => {
-    router.push(`#/api1/${id.toLowerCase()}`, undefined, { shallow: true });
+    router.push(`#${id}`, undefined, { shallow: true });
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
   };
 
@@ -42,7 +55,6 @@ const Layout = () => {
           </GridItem>
           <GridItem h="full" w="full" bgColor={bgColor}>
             <Navbar />
-
             {Object.keys(ComponentMapping).map((key) => {
               const Component = ComponentMapping[key];
               return (
@@ -55,7 +67,6 @@ const Layout = () => {
                   px={{ lg: 10, xl: "20", "2xl": "20", "3xl": "80" }}
                   display="flex"
                   zIndex="-1"
-                  // borderBottom="0.8px solid #2B3039"
                 >
                   <Component />
                 </Grid>
