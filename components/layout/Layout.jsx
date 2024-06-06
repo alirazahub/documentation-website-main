@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import { useRouter } from "next/router";
 import {
   Box,
@@ -21,17 +21,27 @@ const Layout = () => {
   const isDesktop = useBreakpointValue({ base: false, lg: true });
   const bgColor = useColorModeValue("white", "#121539 100%");
 
+  useEffect(() => {
+    const handleHashChange = () => {
+      const hash = window.location.hash.substring(1);
+      const element = document.getElementById(hash);
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth" });
+      }
+    };
+    
+
+    window.addEventListener("hashchange", handleHashChange);
+
+    return () => {
+      window.removeEventListener("hashchange", handleHashChange);
+    };
+  }, []);
+
   const handleNavigation = (id) => {
     const targetId = id.toLowerCase();
-    console.log(`Navigating to #/api1/${targetId}`);
-    router.push(`#/api1/${targetId}`, undefined, { shallow: true });
-    const element = document.getElementById(targetId);
-    if (element) {
-      console.log(`Scrolling to element with ID: ${targetId}`);
-      element.scrollIntoView({ behavior: "smooth" });
-    } else {
-      console.error(`Element with ID: ${targetId} not found`);
-    }
+    console.log(`Navigating to #${targetId}`);
+    window.location.hash = targetId;
   };
 
   return (
