@@ -8,6 +8,7 @@ import {
   useBreakpointValue,
   useColorModeValue,
 } from "@chakra-ui/react";
+import Link from 'next/link';
 import MobileNavbar from "./navbar/MobileNavbar";
 import ComponentMapping from "../data/content";
 import { useStateManagementStore } from "../zustand-store/state-management";
@@ -23,13 +24,11 @@ const Layout = () => {
 
   useEffect(() => {
     const handleHashChange = () => {
-      const hash = window.location.hash.substring(1);
-      const element = document.getElementById(hash);
-      if (element) {
-        element.scrollIntoView({ behavior: "smooth" });
-      }
+      const targetId = id.toLowerCase();
+      console.log(`Navigating to #${targetId}`);
+      router.push(`#${targetId}`);
     };
-    
+
 
     window.addEventListener("hashchange", handleHashChange);
 
