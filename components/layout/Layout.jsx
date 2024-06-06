@@ -22,8 +22,16 @@ const Layout = () => {
   const bgColor = useColorModeValue("white", "#121539 100%");
 
   const handleNavigation = (id) => {
-    router.push(`#/api1/${id.toLowerCase()}`, undefined, { shallow: true });
-    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+    const targetId = id.toLowerCase();
+    console.log(`Navigating to #/api1/${targetId}`);
+    router.push(`#/api1/${targetId}`, undefined, { shallow: true });
+    const element = document.getElementById(targetId);
+    if (element) {
+      console.log(`Scrolling to element with ID: ${targetId}`);
+      element.scrollIntoView({ behavior: "smooth" });
+    } else {
+      console.error(`Element with ID: ${targetId} not found`);
+    }
   };
 
   return (
@@ -49,13 +57,12 @@ const Layout = () => {
                 <Grid
                   w="100%"
                   key={Component.name}
-                  id={Component.name}
+                  id={Component.name.toLowerCase()}
                   py={{ base: 4, xl: 20 }}
                   gap={{ lg: 8, xl: "", "2xl": "" }}
                   px={{ lg: 10, xl: "20", "2xl": "20", "3xl": "80" }}
                   display="flex"
                   zIndex="-1"
-                  // borderBottom="0.8px solid #2B3039"
                 >
                   <Component />
                 </Grid>
@@ -72,7 +79,7 @@ const Layout = () => {
               <Grid
                 onClick={() => setShowMenu(false)}
                 key={Component.name}
-                id={Component.name}
+                id={Component.name.toLowerCase()}
                 py="12"
                 templateColumns="1fr"
                 gap="16"
